@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Arrays;
 
 public class Game
 {
@@ -38,6 +39,7 @@ public class Game
       System.out.println( ) ;
     }
     System.out.println( "---------" ) ;
+    System.out.println( ) ;
   }
 
   public void getScore( )
@@ -80,6 +82,7 @@ public class Game
         if ( board[ i ][ j ] == board[ i+1 ][ j ] )
         {
           board[ i ][ j ]  += board[ i+1 ][ j ] ;
+          updateScore(board[ i ][ j ]) ;
           board[ i+1 ][ j ] = 0;
         }
       }
@@ -121,6 +124,7 @@ public class Game
         if ( board[ i ][ j ] == board[ i-1 ][ j ] )
         {
           board[ i ][ j ]  += board[ i-1 ][ j ] ;
+          updateScore(board[ i ][ j ]) ;
           board[ i-1 ][ j ] = 0;
         }
       }
@@ -162,6 +166,7 @@ public class Game
         if ( board[ i ][ j ] == board[ i ][ j + 1 ] )
         {
           board[ i ][ j ]  += board[ i ][ j + 1 ] ;
+          updateScore(board[ i ][ j ]) ;
           board[ i ][ j + 1 ] = 0;
         }
       }
@@ -203,6 +208,7 @@ public class Game
         if ( board[ i ][ j ] == board[ i ][ j - 1 ] )
         {
           board[ i ][ j ]  += board[ i ][ j - 1 ] ;
+          updateScore(board[ i ][ j ]) ;
           board[ i ][ j - 1 ] = 0;
         }
       }
@@ -214,7 +220,8 @@ public class Game
     gameScore += addition ;
   }
 
-  private void randomNewNumber( ) {
+  private void randomNewNumber( )
+  {
     boolean needsUpdating = true ;
     while ( needsUpdating )
     {
@@ -225,6 +232,36 @@ public class Game
         needsUpdating = false ;
       }
     }
+  }
+
+  private static int[][] deepCopy(int[][] original) {
+    if (original == null) {
+        return null;
+    }
+
+    final int[][] result = new int[original.length][];
+    for (int i = 0; i < original.length; i++) {
+        result[i] = Arrays.copyOf(original[i], original[i].length);
+        // For Java versions prior to Java 6 use the next:
+        // System.arraycopy(original[i], 0, result[i], 0, original[i].length);
+    }
+    return result;
+}
+
+  public boolean checkBoard( )
+  {
+    int[ ][ ] boardCopy = deepCopy( board ) ;
+    boolean noMove = true ;
+    moveUp( ) ;
+    noMove = Arrays.deepEquals( board , boardCopy );
+    moveDown( ) ;
+    noMove = Arrays.deepEquals( board , boardCopy );
+    moveLeft( ) ;
+    noMove = Arrays.deepEquals( board , boardCopy );
+    moveRight( ) ;
+    noMove = Arrays.deepEquals( board , boardCopy );
+    board = boardCopy ;
+    return noMove ;
   }
 
 
@@ -240,6 +277,8 @@ public class Game
     newGame.moveLeft( ) ;
     newGame.displayBoard( );
     newGame.moveRight( ) ;
+    newGame.displayBoard( );
+    System.out.println( newGame.checkBoard( ) ) ;
     newGame.displayBoard( );
   }
 }

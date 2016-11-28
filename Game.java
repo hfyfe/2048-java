@@ -3,7 +3,7 @@ import java.util.Arrays;
 
 public class Game
 {
-  int GAME_SIZE = 4 ;
+  final int GAME_SIZE = 4 ;
   Random randomGenerator = new Random();
   int[][] board = new int[ GAME_SIZE ][ GAME_SIZE] ;
   int gameScore ;
@@ -234,20 +234,6 @@ public class Game
     }
   }
 
-  private static int[][] deepCopy(int[][] original) {
-    if (original == null) {
-        return null;
-    }
-
-    final int[][] result = new int[original.length][];
-    for (int i = 0; i < original.length; i++) {
-        result[i] = Arrays.copyOf(original[i], original[i].length);
-        // For Java versions prior to Java 6 use the next:
-        // System.arraycopy(original[i], 0, result[i], 0, original[i].length);
-    }
-    return result;
-}
-
   public boolean checkBoard( )
   {
     int[ ][ ] boardCopy = deepCopy( board ) ;
@@ -264,6 +250,19 @@ public class Game
     return noMove ;
   }
 
+  private static int[][] deepCopy(int[][] original) {
+    if (original == null) {
+        return null;
+    }
+
+    final int[][] result = new int[original.length][];
+    for (int i = 0; i < original.length; i++) {
+        result[i] = Arrays.copyOf(original[i], original[i].length);
+        // For Java versions prior to Java 6 use the next:
+        // System.arraycopy(original[i], 0, result[i], 0, original[i].length);
+    }
+    return result;
+  }
 
   public static void main ( String[ ] args )
   {

@@ -1,5 +1,6 @@
+# 2048-java
 
-# How to Run
+## How to Run
 
 1. Clone repository
 2. Run ' javac *.java'

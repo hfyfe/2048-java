@@ -9,14 +9,14 @@ public class GameView extends JFrame
         implements KeyListener,
         ActionListener
 {
-  final int GAME_SIZE = 4 ;
+  private final int GAME_SIZE = 4 ;
   private Font myFont = new Font( "Serif" , Font.BOLD , 48 ) ;
   private Object[][] colorSettings = {
                                           { 2 , Color.RED } ,
                                           { 4 , Color.YELLOW } ,
                                           { 8 , Color.GREEN } ,
                                           { 16 , Color.BLUE } ,
-                                          { 32 , Color.DARK_GRAY } ,
+                                          { 32 , Color.LIGHT_GRAY } ,
                                           { 64 , Color.ORANGE } ,
                                           { 128 , Color.MAGENTA } ,
                                           { 256 , Color.PINK } ,
@@ -24,7 +24,7 @@ public class GameView extends JFrame
                                           { 1024 , Color.GREEN } ,
                                         } ;
 
-  final int INITIAL_APP_SIZE = 600 ;
+  private final int INITIAL_APP_SIZE = 600 ;
   private JPanel newGamePanel, gamePanel ;
   private JLabel[] cells ;
   private JLabel score ;
@@ -113,7 +113,7 @@ public class GameView extends JFrame
     updateGameBoard( );
     if ( newGame.checkBoard( ) )
     {
-      System.out.println( "Failed Check" );
+      System.out.println( "Failed Check. Game Over!" );
       newGame.resetBoard( ) ;
     }
   }
@@ -151,11 +151,9 @@ public class GameView extends JFrame
     {
       for ( int j = 0 ; j < GAME_SIZE ; j++ )
       {
-        gamePanel.remove(cells[ 4 * i + j ]);
-        cells[ 4 * i + j ] = new JLabel( Integer.toString( newGame.board[ i ][ j ] ) , JLabel.CENTER ) ;
-        cells[ 4 * i + j ].setFont( myFont ) ;
+        cells[ 4 * i + j ].setOpaque(false);
+        cells[ 4 * i + j ].setText( Integer.toString( newGame.board[ i ][ j ] ) ) ;
         cells[ 4 * i + j ] = setColor( cells[ 4 * i + j ],  newGame.board[ i ][ j ] ) ;
-        gamePanel.add( cells[ 4 * i + j ] ) ;
       }
     }
     score.setText( "CURRENT SCORE: " + Integer.toString( newGame.getScore( ) ) );

@@ -5,27 +5,12 @@ public class Game
 {
   final int GAME_SIZE = 4 ;
   Random randomGenerator = new Random();
-  int[][] board = new int[ GAME_SIZE ][ GAME_SIZE] ;
-  int gameScore ;
+  public int[][] board = new int[ GAME_SIZE ][ GAME_SIZE] ;
+  private int gameScore ;
 
   public Game( )
   {
-    int randomInt = randomGenerator.nextInt(15) ;
-
-    for ( int i = 0 ; i < GAME_SIZE ; i++ )
-    {
-      for ( int j = 0 ; j < GAME_SIZE ; j++ )
-      {
-        if ( i * 4 + j == randomInt) {
-          board[ i ][ j ] = 2 ;
-        }
-        else {
-          board[ i ][ j ] = 0 ;
-        }
-      }
-    }
-
-    gameScore = 0 ;
+    resetBoard( ) ;
   }
 
   public void displayBoard( )
@@ -42,9 +27,10 @@ public class Game
     System.out.println( ) ;
   }
 
-  public void getScore( )
+  public int getScore( )
   {
     System.out.println( "Current Score is " + gameScore ) ;
+    return gameScore ;
   }
 
   public void moveUp()
@@ -222,7 +208,8 @@ public class Game
 
   private void randomNewNumber( )
   {
-    boolean needsUpdating = true ;
+    boolean needsUpdating = emptySpaces() ;
+
     while ( needsUpdating )
     {
       int randomInt = randomGenerator.nextInt(15) ;
@@ -234,34 +221,74 @@ public class Game
     }
   }
 
+  private boolean emptySpaces() {
+
+    for ( int i = 0 ; i < GAME_SIZE ; i++ )
+    {
+      for ( int j = 0 ; j < GAME_SIZE ; j++ )
+      {
+        if ( board[ i ][ j ] == 0)
+        {
+          return true ;
+        }
+      }
+    }
+    return false ;
+  }
+
   public boolean checkBoard( )
   {
+    // System.out.println( "Start of Check Method");
     int[ ][ ] boardCopy = deepCopy( board ) ;
+    int scoreCopy = gameScore ;
     boolean noMove = true ;
+
+    // System.out.println( "Pre Check ");
     moveUp( ) ;
     noMove = Arrays.deepEquals( board , boardCopy );
+    // System.out.println( "Moved Up ; noMove  = " + Boolean.toString(noMove)  );
     moveDown( ) ;
     noMove = Arrays.deepEquals( board , boardCopy );
     moveLeft( ) ;
     noMove = Arrays.deepEquals( board , boardCopy );
     moveRight( ) ;
     noMove = Arrays.deepEquals( board , boardCopy );
+
     board = boardCopy ;
+    gameScore = scoreCopy ;
     return noMove ;
   }
 
-  private static int[][] deepCopy(int[][] original) {
+  private static int[][] deepCopy(int[][] original)
+  {
     if (original == null) {
         return null;
     }
 
-    final int[][] result = new int[original.length][];
-    for (int i = 0; i < original.length; i++) {
-        result[i] = Arrays.copyOf(original[i], original[i].length);
-        // For Java versions prior to Java 6 use the next:
-        // System.arraycopy(original[i], 0, result[i], 0, original[i].length);
+    final int[ ][ ] result = new int[ original.length ][ ];
+    for ( int i = 0 ; i < original.length ; i++ ) {
+        result[ i ] = Arrays.copyOf( original[ i ] , original[ i ].length );
+
     }
     return result;
+  }
+
+  public void resetBoard()
+  {
+    gameScore = 0 ;
+    int randomInt = randomGenerator.nextInt(15) ;
+    for ( int i = 0 ; i < GAME_SIZE ; i++ )
+    {
+      for ( int j = 0 ; j < GAME_SIZE ; j++ )
+      {
+        if ( i * 4 + j == randomInt) {
+          board[ i ][ j ] = 2 ;
+        }
+        else {
+          board[ i ][ j ] = 0 ;
+        }
+      }
+    }
   }
 
   public static void main ( String[ ] args )
@@ -269,13 +296,13 @@ public class Game
     Game newGame = new Game( ) ;
     newGame.displayBoard( );
     newGame.getScore( );
-    newGame.moveLeft( ) ;
+    newGame.moveUp( ) ;
     newGame.displayBoard( );
-    newGame.moveRight( ) ;
+    newGame.moveDown( ) ;
     newGame.displayBoard( );
-    newGame.moveLeft( ) ;
+    newGame.moveUp( ) ;
     newGame.displayBoard( );
-    newGame.moveRight( ) ;
+    newGame.moveDown( ) ;
     newGame.displayBoard( );
     System.out.println( newGame.checkBoard( ) ) ;
     newGame.displayBoard( );
